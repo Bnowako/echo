@@ -1,0 +1,19 @@
+{
+  "name": "czy-ty-slyszysz-mnie",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dl": "uv run -m src.ctsm.main download-files",
+    "dev": "uv run --env-file .env -m src.ctsm.main console",
+    "vet": "uv run pyright && uv run ruff check"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "openapi-typescript": "^7.8.0",
+    "pyright": "^1.1.403"
+  }
+}

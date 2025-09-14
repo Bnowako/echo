@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>echo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #f5f5f5;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #2c3e50;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #34495e;
+    }
+
+    .logo h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ecf0f1;
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+
+    .nav-item {
+      border-bottom: 1px solid #34495e;
+    }
+
+    .nav-item a {
+      display: block;
+      padding: 15px 20px;
+      color: #bdc3c7;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-item a:hover,
+    .nav-item a.active {
+      background: #34495e;
+      color: #ecf0f1;
+    }
+
+    .nav-item a.active {
+      background: #3498db;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      background: white;
+      padding: 20px 30px;
+      border-bottom: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .header h2 {
+      color: #2c3e50;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .section h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #34495e;
+      font-size: 14px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e6ed;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .system-prompt {
+      min-height: 150px;
+    }
+
+    button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 5px 10px 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #2980b9;
+      transform: translateY(-1px);
+    }
+
+    button.danger {
+      background: #e74c3c;
+    }
+
+    button.danger:hover {
+      background: #c0392b;
+    }
+
+    button.secondary {
+      background: #95a5a6;
+    }
+
+    button.secondary:hover {
+      background: #7f8c8d;
+    }
+
+    button.success {
+      background: #27ae60;
+    }
+
+    button.success:hover {
+      background: #229954;
+    }
+
+    .status {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-weight: 500;
+    }
+
+    .status.success {
+      background: #d5f4e6;
+      color: #0f5132;
+      border: 1px solid #badbcc;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c2c7;
+    }
+
+    .mcp-server {
+      background: #f8f9fa;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 10px;
+      padding: 20px 0;
+      border-bottom: 1px solid #e0e6ed;
+      margin-bottom: 30px;
+    }
+
+    #output {
+      background: #1a1a1a;
+      color: #00ff00;
+      font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+      padding: 20px;
+      border-radius: 8px;
+      height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .agent-card {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .agent-card:hover {
+      border-color: #3498db;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .agent-card h4 {
+      color: #2c3e50;
+      margin: 0 0 8px 0;
+      font-size: 18px;
+    }
+
+    .agent-card p {
+      color: #6c757d;
+      margin: 0 0 15px 0;
+      font-size: 14px;
+    }
+
+    .agent-card-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .agent-card-actions button {
+      padding: 6px 12px;
+      font-size: 12px;
+      margin: 0;
+    }
+
+    .agent-list-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6c757d;
+    }
+
+    .agent-list-empty h4 {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <h1>🎤 echo</h1>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="#" data-tab="assistant" class="active">🎯 Assistant</a>
+      </li>
+      <li class="nav-item">
+        <a href="#" data-tab="configurations">⚙️ Configurations</a>
+      </li>
+      <li class="nav-item">
+        <a href="#" data-tab="secrets">🔐 Secrets</a>
+      </li>
+      <li class="nav-item">
+        <a href="#" data-tab="user">👤 User</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <h2 id="pageTitle">Assistant</h2>
+    </div>
+
+    <div class="content">
+      <div id="status" class="status" style="display: none;"></div>
+
+      <!-- Assistant Tab -->
+      <div id="assistant-tab" class="tab-content active">
+        <div class="section">
+          <h3>Run Assistant</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Select Configuration:</label>
+              <select id="runProfileSelect">
+                <option value="default">Default</option>
+              </select>
+            </div>
+          </div>
+          <div class="control-buttons">
+            <button id="startAgent" class="success">Start Agent</button>
+            <button id="stopAgent" class="danger">Stop Agent</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Agent Output</h3>
+          <div class="button-group">
+            <button id="clearOutput" class="secondary">Clear Logs</button>
+            <button id="scrollToBottom" class="secondary">Scroll to Bottom</button>
+          </div>
+          <div id="output"></div>
+        </div>
+      </div>
+
+      <!-- Configurations Tab -->
+      <div id="configurations-tab" class="tab-content">
+        <!-- Agent List View -->
+        <div id="agent-list-view">
+          <div class="section">
+            <h3>Agent Configurations</h3>
+            <div class="button-group">
+              <button id="addNewAgent" class="success">+ Add New Agent</button>
+            </div>
+            <div id="agentList"></div>
+          </div>
+        </div>
+
+        <!-- Agent Edit View -->
+        <div id="agent-edit-view" style="display: none;">
+          <div class="section">
+            <div class="button-group">
+              <button id="backToList" class="secondary">← Back to List</button>
+              <button id="saveAgentConfig" class="success">Save Agent</button>
+            </div>
+            <h3 id="editingAgentTitle">Editing Agent</h3>
+            <div class="form-group">
+              <label>Agent Name:</label>
+              <input type="text" id="editAgentName" placeholder="e.g., Customer Support Assistant">
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>System Prompt</h3>
+            <div class="form-group">
+              <textarea id="systemPrompt" class="system-prompt" placeholder="Enter your system prompt here..."></textarea>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>MCP Servers</h3>
+            <div id="mcpServers"></div>
+            <div class="button-group">
+              <button id="addMcpServer" class="secondary">Add MCP Server</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secrets Tab -->
+      <div id="secrets-tab" class="tab-content">
+        <div class="section">
+          <h3>API Keys</h3>
+          <div class="button-group">
+            <button id="loadEnvSecrets" class="secondary">Load from .env file</button>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>OpenAI API Key:</label>
+              <input type="password" id="openaiApiKey" placeholder="sk-...">
+            </div>
+            <div class="form-group">
+              <label>Deepgram API Key:</label>
+              <input type="password" id="deepgramApiKey" placeholder="Your Deepgram API key">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Cartesia API Key:</label>
+              <input type="password" id="cartesiaApiKey" placeholder="Your Cartesia API key">
+            </div>
+            <div class="form-group">
+              <label>ACI API Key:</label>
+              <input type="password" id="aciApiKey" placeholder="Your ACI API key">
+            </div>
+          </div>
+          <div class="button-group">
+            <button id="saveSecrets">Save Secrets</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Tab -->
+      <div id="user-tab" class="tab-content">
+        <div class="section">
+          <h3>Personal Information</h3>
+          <div class="form-group">
+            <label>Your Name:</label>
+            <input type="text" id="userName" placeholder="e.g., John Doe">
+          </div>
+          <div class="form-group">
+            <label>Preferences:</label>
+            <textarea id="userPreferences" placeholder="e.g., I prefer brief responses, I'm a software developer..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Additional Context:</label>
+            <textarea id="additionalInfo" placeholder="Any other context the AI should know about you..."></textarea>
+          </div>
+          <div class="button-group">
+            <button id="saveUser">Save User Settings</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

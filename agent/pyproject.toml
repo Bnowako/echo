@@ -1,0 +1,53 @@
+[project]
+name = "czy-ty-slyszysz-mnie"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "livekit-agents[openai]~=1.2",
+    "livekit-agents[deepgram]~=1.2",
+    "livekit-plugins-silero~=1.2",
+    "livekit-agents[cartesia]~=1.2",
+    "livekit-plugins-noise-cancellation~=0.2",
+    "pyinstaller>=6.15.0",
+]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.7",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=0.25.3",
+    "wiremock>=2.7.0",
+    "docker>=7.1.0",
+    "testcontainers>=4.12.0",
+    "mcp>=1.14.0"
+]
+
+[tool.ruff]
+line-length = 150
+target-version = "py311"
+
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "PL", # pylint-derived
+    "RUF006" # asyncio-dangling-task
+]
+ignore = [
+    "PLR0913",  # too-many-arguments
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ctsm", "src/scripts"]

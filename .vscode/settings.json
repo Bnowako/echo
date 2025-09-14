@@ -1,0 +1,39 @@
+{
+  "prettier.trailingComma": "all",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "python.analysis.typeCheckingMode": "standard",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.extraPaths": ["./src"],
+  "python.analysis.indexing": true,
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "livekit",
+      "depth": 10
+    },
+    {
+      "name": "opentelemetry",
+      "depth": 10
+    }
+  ],
+  "python.defaultInterpreterPath": "./.venv/bin/python",
+  "files.exclude": {
+    "**/__pycache__": true
+  },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#6166cb"
+  },
+  "cursorpyright.analysis.autoImportCompletions": true,
+  "cursorpyright.analysis.extraPaths": ["./src"],
+  "cursorpyright.analysis.typeCheckingMode": "standard"
+}
